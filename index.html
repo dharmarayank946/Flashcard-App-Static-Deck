@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Dev Flashcards | Master Front-End Fundamentals</title>
+  <meta name="description" content="Interactive 3D flashcard study app covering essential Web Development fundamentals including HTML5, CSS3, JavaScript, Responsive Design, and the DOM.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Background Decorative Shapes (Soft pastel accents) -->
+  <div class="bg-shape bg-shape-blue" aria-hidden="true"></div>
+  <div class="bg-shape bg-shape-green" aria-hidden="true"></div>
+
+  <!-- Main Application Wrapper -->
+  <main class="app-container">
+    
+    <!-- App Header -->
+    <header class="app-header">
+      <div class="header-badge" aria-label="Topic">
+        <span class="badge-dot" aria-hidden="true"></span>
+        <span>Frontend Study Deck</span>
+      </div>
+      <h1 class="app-title">Web Development Flashcards</h1>
+      <p class="app-description">
+        Test and strengthen your core web fundamentals. Click or press <kbd>Space</kbd> on any card to reveal the answer.
+      </p>
+    </header>
+
+    <!-- Deck Status & Progress Section -->
+    <section class="progress-section" aria-label="Study Progress">
+      <div class="progress-info">
+        <div class="counter-badge" id="cardCounter" aria-live="polite">
+          Card 1 of 10
+        </div>
+        <div class="percentage-badge" id="progressPercentage" aria-label="Percentage completed">
+          10% Completed
+        </div>
+      </div>
+      
+      <!-- Accessible Progress Bar -->
+      <div class="progress-track" role="progressbar" id="progressBarTrack" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" aria-label="Deck completion progress">
+        <div class="progress-fill" id="progressBar"></div>
+      </div>
+    </section>
+
+    <!-- Prominent 3D Flashcard Section -->
+    <section class="flashcard-scene" aria-label="Active Flashcard">
+      <div 
+        class="flashcard" 
+        id="flashcard" 
+        role="button" 
+        tabindex="0" 
+        aria-pressed="false" 
+        aria-label="Flashcard: Question side displayed. Press Enter or Space to flip and reveal answer."
+      >
+        <!-- FRONT FACE: Question -->
+        <article class="card-face card-front" id="cardFrontFace">
+          <!-- Card Top Bar -->
+          <div class="card-top-bar">
+            <span class="category-pill" id="cardCategoryFront">HTML5</span>
+            <span class="card-tag" id="cardTagFront">Markup &amp; Semantics</span>
+            <span class="card-index-indicator" id="cardIndexFront">#01</span>
+          </div>
+
+          <!-- Question Content Area -->
+          <div class="card-body">
+            <div class="card-prompt-label">Question</div>
+            <h2 class="card-question-text" id="questionText">
+              Loading question...
+            </h2>
+          </div>
+
+          <!-- Card Bottom Bar / Flip Cue -->
+          <div class="card-bottom-bar">
+            <div class="flip-hint" aria-hidden="true">
+              <svg class="hint-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+              </svg>
+              <span>Click card or tap below to reveal answer</span>
+            </div>
+            <span class="side-badge">Question</span>
+          </div>
+        </article>
+
+        <!-- BACK FACE: Answer -->
+        <article class="card-face card-back" id="cardBackFace">
+          <!-- Card Top Bar -->
+          <div class="card-top-bar">
+            <span class="category-pill pill-success" id="cardCategoryBack">HTML5</span>
+            <span class="card-tag" id="cardTagBack">Markup &amp; Semantics</span>
+            <span class="card-index-indicator" id="cardIndexBack">#01</span>
+          </div>
+
+          <!-- Answer Content Area -->
+          <div class="card-body">
+            <div class="card-prompt-label label-success">
+              <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              Explanation &amp; Answer
+            </div>
+            <div class="card-answer-text" id="answerText">
+              Loading answer...
+            </div>
+          </div>
+
+          <!-- Card Bottom Bar / Flip Cue -->
+          <div class="card-bottom-bar">
+            <div class="flip-hint" aria-hidden="true">
+              <svg class="hint-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+              </svg>
+              <span>Click card to return to question</span>
+            </div>
+            <span class="side-badge side-badge-answer">Answer</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Navigation & Action Controls -->
+    <section class="controls-section" aria-label="Card Controls">
+      <div class="controls-row">
+        <!-- Previous Button -->
+        <button 
+          type="button" 
+          class="btn btn-secondary" 
+          id="prevBtn" 
+          aria-label="Previous flashcard"
+          disabled
+        >
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          <span>Previous</span>
+        </button>
+
+        <!-- Flip Button (Touch & accessibility friendly) -->
+        <button 
+          type="button" 
+          class="btn btn-primary" 
+          id="flipBtn" 
+          aria-label="Flip current card to see answer or question"
+        >
+          <svg class="btn-icon flip-icon-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+          </svg>
+          <span id="flipBtnText">Flip Card</span>
+        </button>
+
+        <!-- Shuffle Cards Button -->
+        <button 
+          type="button" 
+          class="btn btn-secondary" 
+          id="shuffleBtn" 
+          aria-label="Shuffle deck randomly"
+        >
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="16 3 21 3 21 8"></polyline>
+            <line x1="4" y1="20" x2="21" y2="3"></line>
+            <polyline points="21 16 21 21 16 21"></polyline>
+            <line x1="15" y1="15" x2="21" y2="21"></line>
+            <line x1="4" y1="4" x2="9" y2="9"></line>
+          </svg>
+          <span>Shuffle</span>
+        </button>
+
+        <!-- Next Button -->
+        <button 
+          type="button" 
+          class="btn btn-secondary" 
+          id="nextBtn" 
+          aria-label="Next flashcard"
+        >
+          <span>Next</span>
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- Quick Shortcuts / Tips Footer -->
+    <footer class="app-footer">
+      <div class="shortcuts-legend" aria-label="Keyboard Shortcuts">
+        <span class="legend-item"><kbd>←</kbd> Prev</span>
+        <span class="legend-dot">•</span>
+        <span class="legend-item"><kbd>→</kbd> Next</span>
+        <span class="legend-dot">•</span>
+        <span class="legend-item"><kbd>Space</kbd> or <kbd>F</kbd> Flip</span>
+        <span class="legend-dot">•</span>
+        <span class="legend-item"><kbd>S</kbd> Shuffle</span>
+      </div>
+      <p class="footer-note">Clean, static client-side deck • Ready for GitHub Pages</p>
+    </footer>
+
+    <!-- Interactive Shuffle & Toast Feedback Notification -->
+    <div class="toast-notification" id="toastNotification" role="status" aria-live="polite" aria-hidden="true">
+      <span class="toast-icon">🔀</span>
+      <span class="toast-message" id="toastMessage">Deck shuffled successfully!</span>
+    </div>
+
+  </main>
+
+  <!-- Vanilla JavaScript Application Logic -->
+  <script src="script.js"></script>
+</body>
+</html>

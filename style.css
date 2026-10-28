@@ -1,0 +1,785 @@
+/* ==========================================================================
+   Flashcard App (Static Deck)
+   Clean, Modern Light Theme with Pastel Blue & Pastel Green Accents
+   ========================================================================== */
+
+:root {
+  /* Core Light Palette */
+  --bg-page: #F8FAFC;
+  --bg-surface: #FFFFFF;
+  --bg-surface-alt: #F1F5F9;
+
+  /* Pastel Blue Accents */
+  --blue-pastel-bg: #E0F2FE;
+  --blue-pastel-border: #BAE6FD;
+  --blue-accent: #0284C7;
+  --blue-accent-dark: #0369A1;
+  --blue-accent-light: #F0F9FF;
+
+  /* Pastel Green Accents */
+  --green-pastel-bg: #DCFCE7;
+  --green-pastel-border: #BBF7D0;
+  --green-accent: #059669;
+  --green-accent-dark: #047857;
+  --green-accent-light: #F0FDF4;
+
+  /* Neutral Slate Grayscale */
+  --text-primary: #0F172A;
+  --text-secondary: #334155;
+  --text-muted: #64748B;
+  --text-subtle: #94A3B8;
+  --border-light: #E2E8F0;
+  --border-focus: #0284C7;
+
+  /* Card & Control Geometry */
+  --card-radius: 20px;
+  --btn-radius: 12px;
+  --badge-radius: 9999px;
+
+  /* Layered Subtle Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
+  --shadow-card: 0 12px 36px -4px rgba(15, 23, 42, 0.08),
+                 0 4px 12px -2px rgba(15, 23, 42, 0.03);
+  --shadow-card-hover: 0 20px 45px -5px rgba(2, 132, 199, 0.12),
+                       0 8px 20px -3px rgba(15, 23, 42, 0.04);
+  --shadow-button: 0 2px 6px 0 rgba(15, 23, 42, 0.06);
+  --shadow-button-hover: 0 6px 16px -2px rgba(2, 132, 199, 0.18);
+
+  /* Fonts */
+  --font-heading: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Animation Timings */
+  --flip-duration: 0.65s;
+  --flip-easing: cubic-bezier(0.34, 1.25, 0.64, 1);
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+}
+
+/* --------------------------------------------------------------------------
+   Reset & Base Styles
+   -------------------------------------------------------------------------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow-x: hidden;
+  padding: 1.5rem 1rem;
+}
+
+/* --------------------------------------------------------------------------
+   Decorative Background Accents (Clean, Soft & Subtle)
+   -------------------------------------------------------------------------- */
+.bg-shape {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.45;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.bg-shape-blue {
+  width: 420px;
+  height: 420px;
+  top: -120px;
+  right: -100px;
+  background: radial-gradient(circle, var(--blue-pastel-bg) 0%, rgba(224, 242, 254, 0.2) 70%);
+}
+
+.bg-shape-green {
+  width: 460px;
+  height: 460px;
+  bottom: -150px;
+  left: -120px;
+  background: radial-gradient(circle, var(--green-pastel-bg) 0%, rgba(220, 252, 231, 0.2) 70%);
+}
+
+/* --------------------------------------------------------------------------
+   Main App Container
+   -------------------------------------------------------------------------- */
+.app-container {
+  width: 100%;
+  max-width: 680px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+/* --------------------------------------------------------------------------
+   App Header
+   -------------------------------------------------------------------------- */
+.app-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+
+.header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.85rem;
+  background-color: var(--blue-pastel-bg);
+  border: 1px solid var(--blue-pastel-border);
+  border-radius: var(--badge-radius);
+  color: var(--blue-accent-dark);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.75rem;
+}
+
+.badge-dot {
+  width: 7px;
+  height: 7px;
+  background-color: var(--blue-accent);
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.2);
+}
+
+.app-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.6rem, 4vw, 2.1rem);
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.03em;
+  line-height: 1.25;
+  margin-bottom: 0.45rem;
+}
+
+.app-description {
+  font-size: 0.925rem;
+  color: var(--text-muted);
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.app-description kbd {
+  display: inline-block;
+  padding: 0.15rem 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background-color: var(--bg-surface-alt);
+  border: 1px solid var(--border-light);
+  border-radius: 5px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+
+/* --------------------------------------------------------------------------
+   Progress Section
+   -------------------------------------------------------------------------- */
+.progress-section {
+  width: 100%;
+  margin-bottom: 1.25rem;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.counter-badge {
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--badge-radius);
+  box-shadow: var(--shadow-sm);
+}
+
+.percentage-badge {
+  font-size: 0.825rem;
+  font-weight: 600;
+  color: var(--green-accent-dark);
+  background-color: var(--green-pastel-bg);
+  border: 1px solid var(--green-pastel-border);
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--badge-radius);
+}
+
+.progress-track {
+  width: 100%;
+  height: 8px;
+  background-color: var(--border-light);
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 10%;
+  background: linear-gradient(90deg, var(--blue-accent) 0%, var(--green-accent) 100%);
+  border-radius: 999px;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* --------------------------------------------------------------------------
+   3D Flashcard Scene & Geometry
+   -------------------------------------------------------------------------- */
+.flashcard-scene {
+  width: 100%;
+  perspective: 1200px; /* Essential for 3D flip depth */
+  margin-bottom: 1.5rem;
+}
+
+.flashcard {
+  width: 100%;
+  min-height: 340px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform var(--flip-duration) cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  border-radius: var(--card-radius);
+  outline: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Card Hover effect when un-flipped */
+.flashcard:hover:not(.is-flipped) .card-front {
+  box-shadow: var(--shadow-card-hover);
+  border-color: var(--blue-pastel-border);
+}
+
+.flashcard:hover.is-flipped .card-back {
+  box-shadow: var(--shadow-card-hover);
+  border-color: var(--green-pastel-border);
+}
+
+/* Keyboard accessibility outline */
+.flashcard:focus-visible {
+  outline: 3px solid var(--border-focus);
+  outline-offset: 4px;
+}
+
+/* 3D Flip State */
+.flashcard.is-flipped {
+  transform: rotateY(180deg);
+}
+
+/* --------------------------------------------------------------------------
+   Card Faces (Front & Back)
+   -------------------------------------------------------------------------- */
+.card-face {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: var(--card-radius);
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-card);
+  padding: 1.75rem 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  overflow: hidden;
+}
+
+/* Front Face */
+.card-front {
+  transform: rotateY(0deg);
+  background: linear-gradient(180deg, #FFFFFF 0%, #FAFCFF 100%);
+}
+
+/* Back Face */
+.card-back {
+  transform: rotateY(180deg);
+  background: linear-gradient(180deg, #FFFFFF 0%, #FAFFFB 100%);
+  border-color: var(--green-pastel-border);
+}
+
+/* --------------------------------------------------------------------------
+   Card Top Bar
+   -------------------------------------------------------------------------- */
+.card-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-bottom: 1px solid var(--border-light);
+  padding-bottom: 0.85rem;
+}
+
+.category-pill {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.3rem 0.75rem;
+  border-radius: var(--badge-radius);
+  background-color: var(--blue-pastel-bg);
+  color: var(--blue-accent-dark);
+  border: 1px solid var(--blue-pastel-border);
+}
+
+.pill-success {
+  background-color: var(--green-pastel-bg);
+  color: var(--green-accent-dark);
+  border-color: var(--green-pastel-border);
+}
+
+.card-tag {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-right: auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-index-indicator {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-subtle);
+}
+
+/* --------------------------------------------------------------------------
+   Card Body & Content
+   -------------------------------------------------------------------------- */
+.card-body {
+  padding: 1.5rem 0;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.card-prompt-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--blue-accent-dark);
+  margin-bottom: 0.75rem;
+}
+
+.label-success {
+  color: var(--green-accent-dark);
+}
+
+.check-icon {
+  width: 14px;
+  height: 14px;
+  stroke: var(--green-accent);
+}
+
+.card-question-text {
+  font-family: var(--font-heading);
+  font-size: clamp(1.15rem, 3vw, 1.45rem);
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.45;
+  letter-spacing: -0.015em;
+}
+
+.card-answer-text {
+  font-size: clamp(0.95rem, 2.5vw, 1.05rem);
+  color: var(--text-secondary);
+  line-height: 1.65;
+  max-height: 230px;
+  overflow-y: auto;
+  padding-right: 0.35rem;
+}
+
+/* Styled scrollbar for answer text if it overflows */
+.card-answer-text::-webkit-scrollbar {
+  width: 5px;
+}
+.card-answer-text::-webkit-scrollbar-track {
+  background: var(--bg-surface-alt);
+  border-radius: 4px;
+}
+.card-answer-text::-webkit-scrollbar-thumb {
+  background: var(--border-light);
+  border-radius: 4px;
+}
+
+.card-answer-text p {
+  margin-bottom: 0.6rem;
+}
+
+.card-answer-text p:last-child {
+  margin-bottom: 0;
+}
+
+.card-answer-text ul {
+  list-style: none;
+  margin: 0.5rem 0;
+  padding-left: 0;
+}
+
+.card-answer-text li {
+  position: relative;
+  padding-left: 1.25rem;
+  margin-bottom: 0.4rem;
+}
+
+.card-answer-text li::before {
+  content: "•";
+  position: absolute;
+  left: 0.25rem;
+  color: var(--green-accent);
+  font-weight: bold;
+}
+
+.card-answer-text code,
+.card-question-text code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background-color: var(--bg-surface-alt);
+  border: 1px solid var(--border-light);
+  padding: 0.15rem 0.35rem;
+  border-radius: 4px;
+  color: var(--blue-accent-dark);
+}
+
+/* --------------------------------------------------------------------------
+   Card Bottom Bar (Flip Cue & Side Tag)
+   -------------------------------------------------------------------------- */
+.card-bottom-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-light);
+  padding-top: 0.85rem;
+}
+
+.flip-hint {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.hint-icon {
+  width: 15px;
+  height: 15px;
+  stroke: var(--blue-accent);
+  transition: transform var(--transition-normal);
+}
+
+.flashcard:hover .hint-icon {
+  transform: rotate(90deg);
+}
+
+.side-badge {
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--badge-radius);
+  background-color: var(--bg-surface-alt);
+  color: var(--text-muted);
+  border: 1px solid var(--border-light);
+}
+
+.side-badge-answer {
+  background-color: var(--green-pastel-bg);
+  color: var(--green-accent-dark);
+  border-color: var(--green-pastel-border);
+}
+
+/* --------------------------------------------------------------------------
+   Controls Section
+   -------------------------------------------------------------------------- */
+.controls-section {
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+.controls-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+/* Buttons Base */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--font-heading);
+  font-size: 0.925rem;
+  font-weight: 600;
+  min-height: 48px; /* Touch-friendly tap target */
+  padding: 0.65rem 1.25rem;
+  border-radius: var(--btn-radius);
+  border: 1px solid transparent;
+  cursor: pointer;
+  outline: none;
+  transition: all var(--transition-fast);
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.btn:focus-visible {
+  outline: 3px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+.btn-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+/* Primary Button (Flip Card) */
+.btn-primary {
+  background: linear-gradient(135deg, var(--blue-accent) 0%, #0369A1 100%);
+  color: #FFFFFF;
+  box-shadow: var(--shadow-button);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #0274af 0%, #025785 100%);
+  box-shadow: var(--shadow-button-hover);
+  transform: translateY(-1px);
+}
+
+/* Secondary Button (Prev, Next, Shuffle) */
+.btn-secondary {
+  background-color: var(--bg-surface);
+  color: var(--text-secondary);
+  border-color: var(--border-light);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background-color: var(--blue-pastel-bg);
+  color: var(--blue-accent-dark);
+  border-color: var(--blue-pastel-border);
+  transform: translateY(-1px);
+}
+
+/* Disabled Button State */
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+  box-shadow: none;
+  transform: none;
+}
+
+/* --------------------------------------------------------------------------
+   App Footer & Shortcuts Legend
+   -------------------------------------------------------------------------- */
+.app-footer {
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+.shortcuts-legend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.legend-item kbd {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+}
+
+.legend-dot {
+  color: var(--border-light);
+}
+
+.footer-note {
+  font-size: 0.75rem;
+  color: var(--text-subtle);
+}
+
+/* --------------------------------------------------------------------------
+   Toast Notification (Shuffle & Status Feedback)
+   -------------------------------------------------------------------------- */
+.toast-notification {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(30px);
+  background-color: var(--text-primary);
+  color: #FFFFFF;
+  padding: 0.65rem 1.25rem;
+  border-radius: var(--badge-radius);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.25);
+  opacity: 0;
+  visibility: hidden;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease, visibility 0.3s;
+  z-index: 100;
+}
+
+.toast-notification.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+.toast-icon {
+  font-size: 1rem;
+}
+
+/* --------------------------------------------------------------------------
+   Responsive Design & Mobile Breakpoints
+   -------------------------------------------------------------------------- */
+@media (max-width: 640px) {
+  body {
+    padding: 1rem 0.75rem;
+    justify-content: flex-start;
+  }
+
+  .app-header {
+    margin-bottom: 1rem;
+  }
+
+  .flashcard-scene {
+    margin-bottom: 1.25rem;
+  }
+
+  .flashcard {
+    min-height: 380px;
+  }
+
+  .card-face {
+    padding: 1.25rem 1.25rem;
+  }
+
+  .card-top-bar {
+    padding-bottom: 0.65rem;
+  }
+
+  .card-tag {
+    display: none; /* Hide sub-tag on small screens to conserve space */
+  }
+
+  .card-body {
+    padding: 1rem 0;
+  }
+
+  .controls-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+    width: 100%;
+  }
+
+  .btn {
+    width: 100%;
+    padding: 0.65rem 0.75rem;
+    font-size: 0.875rem;
+  }
+
+  /* Grid order for natural thumb reach on mobile */
+  #prevBtn {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  #nextBtn {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  #flipBtn {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  #shuffleBtn {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .shortcuts-legend {
+    display: none; /* Keyboard hints not relevant on pure touchscreens */
+  }
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
+  .flashcard {
+    min-height: 350px;
+  }
+
+  .card-face {
+    padding: 1.5rem 1.75rem;
+  }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .flashcard {
+    transition: transform 0.01ms !important;
+  }
+  .progress-fill,
+  .btn,
+  .toast-notification {
+    transition: none !important;
+  }
+}
